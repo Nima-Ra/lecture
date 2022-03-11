@@ -1,0 +1,35 @@
+{
+  "canisters": {
+    "lecture": {
+      "main": "src/lecture/main.mo",
+      "type": "motoko"
+    },
+    "lecture_assets": {
+      "dependencies": [
+        "lecture"
+      ],
+      "frontend": {
+        "entrypoint": "src/lecture_assets/src/index.html"
+      },
+      "source": [
+        "src/lecture_assets/assets",
+        "dist/lecture_assets/"
+      ],
+      "type": "assets"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "dfx": "0.8.4",
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:8000",
+      "type": "ephemeral"
+    }
+  },
+  "version": 1
+}
