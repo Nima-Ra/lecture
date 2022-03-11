@@ -1,21 +1,10 @@
 {
   "canisters": {
     "lecture": {
-      "main": "src/lecture/main.mo",
-      "type": "motoko"
-    },
-    "lecture_assets": {
-      "dependencies": [
-        "lecture"
-      ],
-      "frontend": {
-        "entrypoint": "src/lecture_assets/src/index.html"
-      },
-      "source": [
-        "src/lecture_assets/assets",
-        "dist/lecture_assets/"
-      ],
-      "type": "assets"
+      "build": "node build.js lecture",
+      "candid": "lecture.did",
+      "wasm": "target/wasm32-unknown-unknown/release/lecture-opt.wasm",
+      "type": "custom"
     }
   },
   "defaults": {
