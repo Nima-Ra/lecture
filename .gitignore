@@ -9,6 +9,8 @@
 
 # dfx temporary files
 .dfx/
+target/*
+Cargo.lock
 
 # frontend code
 node_modules/
