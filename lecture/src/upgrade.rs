@@ -2,6 +2,7 @@
 use crate::common_types::Metadata;
 use crate::hashmap::HashMapDB;
 use crate::btreemap::BTreeMapDB;
+use crate::management::Admins;
 
 // IC imports
 use ic_kit::*;

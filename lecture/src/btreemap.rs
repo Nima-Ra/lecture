@@ -3,7 +3,6 @@ use crate::management::*;
 
 use ic_kit::*;
 use ic_kit::macros::*;
-use serde::Deserialize;
 use std::collections::BTreeMap;
 
 
@@ -26,11 +25,11 @@ impl BTreeMapDB {
         Ok(())
     }
 
-    pub fn remove(&mut self, id: &Principal) -> Result<(), Error> {
-        if !self.0.contains_key(id) {
+    pub fn remove(&mut self, id: Principal) -> Result<(), Error> {
+        if !self.0.contains_key(&id) {
             return Err(Error::NonExistentItem);
         }
-        self.0.remove(id);
+        self.0.remove(&id);
         Ok(())
     }
 
@@ -44,25 +43,31 @@ impl BTreeMapDB {
 }
 
 #[update]
-pub fn add(metadata: Metadata) -> Result<(), Error> {
+pub fn add_btreemap(metadata: Metadata) -> Result<(), Error> {
+    if !is_admin(ic::caller()) {
+        return Err(Error::NotAuthorized);
+    }
     let db = ic::get_mut::<BTreeMapDB>();
     db.add(metadata)
 }
 
 #[update]
-pub fn remove(id: Principal) -> Result<(), Error> {
+pub fn remove_btreemap(id: Principal) -> Result<(), Error> {
+    if !is_admin(ic::caller()) {
+        return Err(Error::NotAuthorized);
+    }
     let db = ic::get_mut::<BTreeMapDB>();
     db.remove(id)
 }
 
 #[query]
-pub fn get(id: Principal) -> Option<&'static Metadata> {
-    let db = ic::get::<BTreeMapDB>();
+pub fn get_btreemap(id: Principal) -> Option<&'static Metadata> {
+    let db = ic::get_mut::<BTreeMapDB>();
     db.get(id)
 }
 
 #[query]
-pub fn get_all() -> Vec<&'static Metadata> {
+pub fn get_all_btreemap() -> Vec<&'static Metadata> {
     let db = ic::get::<BTreeMapDB>();
     db.get_all()
 }

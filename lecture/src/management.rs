@@ -1,4 +1,4 @@
-use ic_kit::{Principal, ic};
+use ic_kit::{Principal, ic, macros::init};
 
 pub struct Admins(pub Vec<Principal>);
 
@@ -9,6 +9,11 @@ impl Default for Admins {
 }
 
 pub fn is_admin(id: Principal) -> bool {
-    let admins = ic::get::<Admins>().0;
+    let admins = &ic::get::<Admins>().0;
     admins.contains(&id)
+}
+
+#[init]
+fn init() {
+    ic::store(Admins(vec![ic::caller()]));
 }

@@ -3,7 +3,6 @@ use crate::management::*;
 
 use ic_kit::macros::*;
 use ic_kit::*;
-use ic_kit::ic::spawn;
 use std::collections::HashMap;
 
 #[derive(Default)]
@@ -20,7 +19,6 @@ impl HashMapDB {
     }
 
     pub fn add(&mut self, metadata: Metadata) -> Result<(), Error> {
-        let id: Principal = metadata.id;
         self.0.insert(metadata.id, metadata);
         Ok(())
     }
@@ -43,25 +41,31 @@ impl HashMapDB {
 }
 
 #[update]
-pub fn add(metadata: Metadata) -> Result<(), Error> {
+pub fn add_hashmap(metadata: Metadata) -> Result<(), Error> {
+    if !is_admin(ic::caller()) {
+        return Err(Error::NotAuthorized);
+    }
     let db = ic::get_mut::<HashMapDB>();
     db.add(metadata)
 }
 
 #[update]
-pub fn remove(id: Principal) -> Result<(), Error> {
+pub fn remove_hashmap(id: Principal) -> Result<(), Error> {
+    if !is_admin(ic::caller()) {
+        return Err(Error::NotAuthorized);
+    }
     let db = ic::get_mut::<HashMapDB>();
-    db.remove(id)
+    db.remove(&id)
 }
 
 #[query]
-pub fn get(id: Principal) -> Option<&'static Metadata> {
-    let db = ic::get::<HashMapDB>();
+pub fn get_hashmap(id: Principal) -> Option<&'static Metadata> {
+    let db = ic::get_mut::<HashMapDB>();
     db.get(id)
 }
 
 #[query]
-pub fn get_all() -> Vec<&'static Metadata> {
+pub fn get_all_hashmap() -> Vec<&'static Metadata> {
     let db = ic::get::<HashMapDB>();
     db.get_all()
 }
